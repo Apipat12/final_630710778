@@ -75,7 +75,6 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(_polls![index].question),
-
               ],
             ),
             Row(
@@ -83,8 +82,9 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   height: 500,width: 500,
                   padding: EdgeInsetsDirectional.all(20),
-                  child: ElevatedButton(onPressed: (){}, child: Text("asdad")),
-                 
+
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black12, width: 5)),
                 ),
               ],
             ),
