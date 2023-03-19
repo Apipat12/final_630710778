@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../models/poll.dart';
+import '../../services/api.dart';
 import '../my_scaffold.dart';
 
 class HomePage extends StatefulWidget {
@@ -13,6 +14,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<Poll>? _polls;
   var _isLoading = false;
+  var _isError = false;
 
   @override
   void initState() {
@@ -21,7 +23,25 @@ class _HomePageState extends State<HomePage> {
   }
 
   _loadData() async {
-    // todo: Load list of polls here
+    setState(() {
+      _isLoading = true;
+      _isError = false;
+    });
+    try {
+      var result = await ApiClient().getPoll();
+
+      setState(() {
+        _polls = result;
+      });
+    } catch (e) {
+      setState(() {
+        _isError = true;
+      });
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -29,7 +49,8 @@ class _HomePageState extends State<HomePage> {
     return MyScaffold(
       body: Column(
         children: [
-          Image.network('https://cpsu-test-api.herokuapp.com/images/election.jpg'),
+          Image.network(
+              'https://cpsu-test-api.herokuapp.com/images/election.jpg'),
           Expanded(
             child: Stack(
               children: [
@@ -46,9 +67,29 @@ class _HomePageState extends State<HomePage> {
   ListView _buildList() {
     return ListView.builder(
       itemCount: _polls!.length,
-      itemBuilder: (BuildContext context, int index) {
-        // todo: Create your poll item by replacing this Container()
-        return Container();
+      itemBuilder: (context, index) {
+        return Column(
+          children: [
+            SizedBox(height: 20,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(_polls![index].question),
+
+              ],
+            ),
+            Row(
+              children: [
+                Container(
+                  height: 500,width: 500,
+                  padding: EdgeInsetsDirectional.all(20),
+                  child: ElevatedButton(onPressed: (){}, child: Text("asdad")),
+                 
+                ),
+              ],
+            ),
+          ],
+        );
       },
     );
   }
